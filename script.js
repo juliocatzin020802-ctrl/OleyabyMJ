@@ -23,6 +23,7 @@ let state = {
   qty: 1,
   editingItemId: null,
   menuItems: [],
+  cart: [],
   content: {
     brandName: 'Oleya by M.J.',
     heroTitle: 'Sabor con', heroAccent: 'Pasión',
@@ -239,10 +240,24 @@ function renderProductList() {
   const opts = [...state.menuItems.map(i => i.name), 'Solicitud especial'];
   list.innerHTML = opts.map(opt => {
     const item = state.menuItems.find(i => i.name === opt);
-    const isActive = state.selectedProduct === opt;
+    
+    // Calcular cantidad en el carrito para esta opción
+    let cartQty = 0;
+    if (state.cart) {
+      if (opt === 'Solicitud especial') {
+        cartQty = state.cart.filter(i => i.isCustom).reduce((acc, curr) => acc + curr.qty, 0);
+      } else if (item) {
+        const cartItem = state.cart.find(i => i.id === item.id);
+        if (cartItem) cartQty = cartItem.qty;
+      }
+    }
+
     return `
-      <button class="product-btn ${isActive ? 'active' : ''}" onclick="selectProduct(null,'${opt.replace(/'/g,"\\'")}')" type="button">
-        <span class="pname">${opt === 'Solicitud especial' ? '📝 Solicitud especial' : opt}</span>
+      <button class="product-btn ${cartQty > 0 ? 'active' : ''}" onclick="selectProduct(null,'${opt.replace(/'/g,"\\'")}')" type="button">
+        <span class="pname">
+          ${opt === 'Solicitud especial' ? '📝 Solicitud especial' : opt}
+          ${cartQty > 0 ? ` <strong style="color:#fff; background:var(--accent); padding:2px 6px; border-radius:10px; font-size:0.75rem; margin-left:4px;">${cartQty}</strong>` : ''}
+        </span>
         ${item ? `<span class="pprice">${item.price}</span>` : ''}
       </button>
     `;
@@ -250,37 +265,129 @@ function renderProductList() {
 }
 
 function selectProduct(id, name) {
+  let item = null;
   if (id) {
-    const item = state.menuItems.find(i => i.id === id);
-    if (item) state.selectedProduct = item.name;
-  } else {
-    state.selectedProduct = name;
+    item = state.menuItems.find(i => i.id === id);
+  } else if (name && name !== 'Solicitud especial') {
+    item = state.menuItems.find(i => i.name === name);
   }
-  state.qty = 1;
-  document.getElementById('qty-value').textContent = '1';
 
-  const isEspecial = state.selectedProduct === 'Solicitud especial';
-  const qtySection = document.getElementById('qty-section');
-  const notesSection = document.getElementById('notes-section');
-  const notesLabel = document.getElementById('notes-label');
-  const notesArea = document.getElementById('order-notes');
-
-  qtySection.style.display = (state.selectedProduct && !isEspecial) ? 'flex' : 'none';
-  notesSection.style.display = state.selectedProduct ? 'flex' : 'none';
-
-  if (isEspecial) {
-    notesLabel.textContent = '✏️ Describe tu solicitud';
-    notesArea.placeholder = 'Cuéntanos con detalle qué necesitas, diseño, fecha, etc.';
-  } else {
-    notesLabel.textContent = '📝 Notas adicionales (opcional)';
-    notesArea.placeholder = 'Alergias, diseño especial, fecha de entrega...';
+  if (item) {
+    addToCart(item);
+  } else if (name === 'Solicitud especial') {
+    addCustomRequestToCart();
   }
+}
+
+function addToCart(item) {
+  if (!state.cart) state.cart = [];
+  const existing = state.cart.find(i => i.id === item.id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    state.cart.push({
+      id: item.id,
+      name: item.name,
+      priceNum: item.priceNum,
+      price: item.price,
+      qty: 1,
+      isCustom: false
+    });
+  }
+  renderCart();
   renderProductList();
 }
 
-function changeQty(delta) {
-  state.qty = Math.max(1, state.qty + delta);
-  document.getElementById('qty-value').textContent = state.qty;
+function addCustomRequestToCart() {
+  if (!state.cart) state.cart = [];
+  const id = 'custom-' + Date.now();
+  state.cart.push({
+    id: id,
+    name: 'Solicitud especial',
+    priceNum: 0,
+    price: '$0',
+    qty: 1,
+    isCustom: true,
+    notes: ''
+  });
+  renderCart();
+  renderProductList();
+}
+
+function changeCartQty(id, delta) {
+  const item = state.cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) {
+    state.cart = state.cart.filter(i => i.id !== id);
+  }
+  renderCart();
+  renderProductList();
+}
+
+function updateCustomNotes(id, value) {
+  const item = state.cart.find(i => i.id === id);
+  if (item && item.isCustom) {
+    item.notes = value;
+  }
+}
+
+function renderCart() {
+  const cartContainer = document.getElementById('cart-container');
+  if (!cartContainer) return;
+
+  if (!state.cart || state.cart.length === 0) {
+    cartContainer.innerHTML = `
+      <div class="empty-cart-message">
+        <p style="color:var(--gray); text-align:center; padding:1rem 0; margin:0;">No has agregado productos a tu pedido.</p>
+        <p style="font-size:0.85rem; color:var(--gray); text-align:center; margin:0;">Haz clic en los productos del catálogo o en "Solicitud especial" arriba.</p>
+      </div>
+    `;
+    const totalEl = document.getElementById('cart-total-row');
+    if (totalEl) totalEl.style.display = 'none';
+    return;
+  }
+
+  let total = 0;
+
+  cartContainer.innerHTML = state.cart.map(item => {
+    total += item.priceNum * item.qty;
+
+    return `
+      <div class="cart-item-row" style="display:flex; flex-direction:column; padding:0.75rem 0; border-bottom:1px solid rgba(0,0,0,0.05); gap:0.5rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; width:100%;">
+          <div style="flex:1; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+            <span style="font-weight:600; color:var(--dark);">${item.name}</span>
+            ${item.priceNum > 0 ? `<span style="font-size:0.8rem; color:var(--gray);">(${item.price} c/u)</span>` : ''}
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div class="qty-row" style="gap: 0.5rem;">
+              <button type="button" class="qty-btn" style="width: 1.8rem; height: 1.8rem; font-size: 0.9rem;" onclick="changeCartQty('${item.id}', -1)">−</button>
+              <span class="qty-value" style="font-size: 0.95rem; min-width: 1.2rem;">${item.qty}</span>
+              <button type="button" class="qty-btn" style="width: 1.8rem; height: 1.8rem; font-size: 0.9rem;" onclick="changeCartQty('${item.id}', 1)">+</button>
+            </div>
+            <span style="font-weight:600; min-width:55px; text-align:right;">
+              ${item.priceNum > 0 ? `$${(item.priceNum * item.qty).toFixed(0)}` : 'Especial'}
+            </span>
+          </div>
+        </div>
+        ${item.isCustom ? `
+          <textarea 
+            placeholder="Describe tu solicitud especial con detalle (diseño, sabor, fecha)..." 
+            rows="2" 
+            style="width:100%; margin-top:0.25rem; padding:0.5rem; font-size:0.85rem; border-radius:8px; border:1px solid rgba(171,156,219,0.3); background:#fafaff; resize:vertical;"
+            onchange="updateCustomNotes('${item.id}', this.value)"
+          >${item.notes || ''}</textarea>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+
+  const totalEl = document.getElementById('cart-total-row');
+  if (totalEl) {
+    totalEl.style.display = 'flex';
+    document.getElementById('cart-total-value').textContent = `$${total.toFixed(0)}`;
+  }
 }
 
 function sendWhatsApp() {
@@ -290,24 +397,45 @@ function sendWhatsApp() {
   const errEl = document.getElementById('order-error');
 
   if (!nombre) { showError(errEl, 'Por favor escribe tu nombre.'); return; }
-  if (!state.selectedProduct) { showError(errEl, 'Selecciona un producto o solicitud.'); return; }
-  const isEspecial = state.selectedProduct === 'Solicitud especial';
-  if (isEspecial && !notes) { showError(errEl, 'Describe tu solicitud especial.'); return; }
-  errEl.style.display = 'none';
+  if (!state.cart || state.cart.length === 0) {
+    showError(errEl, 'Por favor agrega al menos un producto a tu pedido.');
+    return;
+  }
 
-  const item = state.menuItems.find(i => i.name === state.selectedProduct);
-  const price = item ? ` (${item.price} c/u)` : '';
+  // Verificar que todas las solicitudes especiales tengan descripción
+  const missingCustomNotes = state.cart.find(i => i.isCustom && (!i.notes || !i.notes.trim()));
+  if (missingCustomNotes) {
+    showError(errEl, 'Por favor describe tu solicitud especial.');
+    return;
+  }
+  errEl.style.display = 'none';
 
   let msg = `¡Hola Oleya by M.J.! 🌸\n\nMe llamo *${nombre}*`;
   if (tel) msg += ` y mi número es ${tel}`;
   msg += `.\n\nQuiero hacer un pedido:\n`;
-  if (isEspecial) {
-    msg += `📝 *Solicitud especial:*\n${notes}`;
-  } else {
-    msg += `🛍 *${state.selectedProduct}*${price}\n📦 Cantidad: ${state.qty}`;
-    if (notes) msg += `\n📝 Notas: ${notes}`;
+
+  let total = 0;
+  state.cart.forEach((item, idx) => {
+    msg += `\n${idx + 1}. *${item.name}*`;
+    if (item.priceNum > 0) {
+      msg += ` (${item.price} c/u)\n   📦 Cantidad: ${item.qty} · Subtotal: $${(item.priceNum * item.qty).toFixed(0)}`;
+      total += item.priceNum * item.qty;
+    } else {
+      msg += `\n   📝 Descripción: ${item.notes}`;
+    }
+  });
+
+  if (total > 0) {
+    msg += `\n\n💰 *Total Estimado:* $${total.toFixed(0)}`;
   }
-  if (state.user?.address) msg += `\n\n📍 Entrega en: ${state.user.address}, ${state.user.colonia}`;
+
+  if (notes) {
+    msg += `\n\n📝 *Notas adicionales:* ${notes}`;
+  }
+
+  if (state.user?.address) {
+    msg += `\n\n📍 *Entrega en:* ${state.user.address}, ${state.user.colonia}`;
+  }
   msg += '\n\n¡Gracias! 💜';
 
   window.open(`https://wa.me/${state.content.waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -519,10 +647,15 @@ async function handleUserRegister(e) {
    ADMIN PANEL
 ════════════════════════════════════════════ */
 function setAdminTab(tab) {
-  ['inicio','menu','historia','contacto'].forEach(t => {
-    document.getElementById(`admin-tab-${t}`).classList.toggle('active', t === tab);
-    document.getElementById(`tab-btn-${t}`).classList.toggle('active', t === tab);
+  ['inicio','menu','historia','contacto','admins'].forEach(t => {
+    const elTab = document.getElementById(`admin-tab-${t}`);
+    const elBtn = document.getElementById(`tab-btn-${t}`);
+    if (elTab) elTab.classList.toggle('active', t === tab);
+    if (elBtn) elBtn.classList.toggle('active', t === tab);
   });
+  if (tab === 'admins') {
+    loadAndRenderAdmins();
+  }
 }
 
 function toggleAdminSidebar() {
@@ -999,3 +1132,208 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error("Error al suscribirse a los cambios de Supabase:", err);
   }
 });
+
+/* ════════════════════════════════════════════
+   ADMINISTRATORS MANAGEMENT
+════════════════════════════════════════════ */
+let newAdminUserData = null;
+
+function openAddAdminModal() {
+  const card = document.getElementById('card-add-admin');
+  if (card) {
+    card.style.display = card.style.display === 'none' ? 'block' : 'none';
+    document.getElementById('new-admin-email').value = '';
+    document.getElementById('new-admin-found-info').style.display = 'none';
+    document.getElementById('add-admin-error').style.display = 'none';
+  }
+}
+
+async function handleAddAdminSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('new-admin-email').value.trim();
+  const errorEl = document.getElementById('add-admin-error');
+  const infoEl = document.getElementById('new-admin-found-info');
+  
+  errorEl.style.display = 'none';
+  infoEl.style.display = 'none';
+  newAdminUserData = null;
+
+  if (!supabaseClient) return;
+
+  try {
+    const { data: user, error } = await supabaseClient
+      .from('usuarios')
+      .select('id_usuario, nombre, email')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (error) {
+      errorEl.textContent = 'Error al buscar el usuario: ' + error.message;
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    if (!user) {
+      errorEl.textContent = 'No se encontró ningún usuario registrado con ese correo.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    const { data: existingAdmin } = await supabaseClient
+      .from('administradores')
+      .select('id_admin')
+      .eq('id_admin', user.id_usuario)
+      .maybeSingle();
+
+    if (existingAdmin) {
+      errorEl.textContent = 'Este usuario ya es administrador.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    newAdminUserData = user;
+    document.getElementById('new-admin-found-name').textContent = user.nombre;
+    document.getElementById('new-admin-found-email').textContent = user.email;
+    infoEl.style.display = 'block';
+  } catch (err) {
+    errorEl.textContent = 'Error inesperado: ' + err.message;
+    errorEl.style.display = 'block';
+  }
+}
+
+async function confirmAddAdmin() {
+  if (!newAdminUserData || !supabaseClient) return;
+  const errorEl = document.getElementById('add-admin-error');
+  try {
+    const { error } = await supabaseClient
+      .from('administradores')
+      .insert({
+        id_admin: newAdminUserData.id_usuario,
+        nombre: newAdminUserData.nombre,
+        email: newAdminUserData.email
+      });
+
+    if (error) {
+      errorEl.textContent = 'Error al agregar administrador: ' + error.message;
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    newAdminUserData = null;
+    openAddAdminModal();
+    loadAndRenderAdmins();
+    
+    const badge = document.getElementById('saved-badge');
+    if (badge) {
+      badge.classList.add('show');
+      setTimeout(() => badge.classList.remove('show'), 2500);
+    }
+  } catch (err) {
+    errorEl.textContent = 'Error: ' + err.message;
+    errorEl.style.display = 'block';
+  }
+}
+
+async function loadAndRenderAdmins() {
+  const container = document.getElementById('admin-list-container');
+  if (!container || !supabaseClient) return;
+
+  container.innerHTML = '<p style="color:var(--gray); padding:1rem 0; text-align:center;">Cargando administradores...</p>';
+
+  try {
+    const { data: admins, error } = await supabaseClient
+      .from('administradores')
+      .select('*')
+      .order('fecha_registro', { ascending: true });
+
+    if (error) {
+      container.innerHTML = `<p style="color:red; text-align:center; padding:1rem 0;">Error al cargar: ${error.message}</p>`;
+      return;
+    }
+
+    if (!admins || admins.length === 0) {
+      container.innerHTML = '<p style="color:var(--gray); text-align:center; padding:1rem 0;">No hay administradores registrados.</p>';
+      return;
+    }
+
+    container.innerHTML = admins.map(adm => {
+      const isSelf = state.user && state.user.id === adm.id_admin;
+      return `
+        <div class="menu-item-row" id="admin-row-${adm.id_admin}" style="display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; border:1px solid rgba(0,0,0,0.05); border-radius:10px; background:#fff; gap:1rem;">
+          <div class="item-emoji-box" style="font-size:1.5rem; background:rgba(171,156,219,0.15); width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center;">👑</div>
+          <div class="item-info" style="flex:1;">
+            <p class="item-name" style="font-weight:600; margin:0; color:var(--dark);">${adm.nombre} ${isSelf ? '<strong style="color:var(--accent); font-size:0.75rem; background:rgba(171,156,219,0.2); padding:2px 6px; border-radius:10px; margin-left:4px;">Tú</strong>' : ''}</p>
+            <p class="item-desc" style="margin:2px 0 0 0; font-size:0.85rem; color:var(--gray);">${adm.email}</p>
+          </div>
+          <div class="menu-item-actions" style="display:flex; gap:0.5rem;">
+            <button class="btn-icon edit" onclick="editAdminName('${adm.id_admin}', '${adm.nombre.replace(/'/g, "\\'")}')" title="Editar Nombre" style="background:none; border:none; padding:6px; cursor:pointer; color:var(--gray); border-radius:6px; display:flex; align-items:center; justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            ${!isSelf ? `
+              <button class="btn-icon del" onclick="deleteAdmin('${adm.id_admin}', '${adm.nombre.replace(/'/g, "\\'")}')" title="Revocar Permisos" style="background:none; border:none; padding:6px; cursor:pointer; color:var(--red, #e74c3c); border-radius:6px; display:flex; align-items:center; justify-content:center;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    container.innerHTML = `<p style="color:red; text-align:center; padding:1rem 0;">Error: ${err.message}</p>`;
+  }
+}
+
+async function editAdminName(id, currentName) {
+  const newName = prompt('Modificar nombre del administrador:', currentName);
+  if (newName === null) return;
+  const nameClean = newName.trim();
+  if (!nameClean) {
+    alert('El nombre no puede estar vacío.');
+    return;
+  }
+
+  if (!supabaseClient) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('administradores')
+      .update({ nombre: nameClean })
+      .eq('id_admin', id);
+
+    if (error) {
+      alert('Error al modificar nombre: ' + error.message);
+      return;
+    }
+
+    loadAndRenderAdmins();
+    
+    if (state.user && state.user.id === id) {
+      state.user.name = nameClean;
+      syncUserUI();
+    }
+  } catch (err) {
+    alert('Error: ' + err.message);
+  }
+}
+
+async function deleteAdmin(id, name) {
+  if (!confirm(`¿Estás seguro de que quieres quitar los permisos de administrador a ${name}?`)) return;
+
+  if (!supabaseClient) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('administradores')
+      .delete()
+      .eq('id_admin', id);
+
+    if (error) {
+      alert('Error al eliminar administrador: ' + error.message);
+      return;
+    }
+
+    loadAndRenderAdmins();
+  } catch (err) {
+    alert('Error: ' + err.message);
+  }
+}
