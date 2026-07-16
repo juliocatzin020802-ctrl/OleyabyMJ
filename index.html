@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oleya by M.J. — Repostería Artesanal</title>
+  <meta name="description" content="Galletas de mantequilla decoradas, New York cookies y pays artesanales hechos con amor en Mérida. Pedidos especiales y personalizados." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Alegreya+SC:wght@400;500;700&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     MAIN SITE VIEW
+═══════════════════════════════════ -->
+<div id="view-site" class="view active">
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <div class="nav-inner">
+      <a href="#inicio" class="nav-logo" onclick="scrollToSection('inicio')">
+        <img src="OleyaWebsite_design/src/imports/oleyalogo__Converted_-01.png" alt="Oleya by M.J." onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span style="display:none;font-family:'Dancing Script',cursive;font-size:1.6rem;font-weight:700;color:#AB9CDB">Oleya</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#inicio" onclick="scrollToSection('inicio');return false">Inicio</a></li>
+        <li><a href="#menu" onclick="scrollToSection('menu');return false">Menú</a></li>
+        <li><a href="#historia" onclick="scrollToSection('historia');return false">Historia</a></li>
+        <li><a href="#contacto" onclick="scrollToSection('contacto');return false">Contacto</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-account" id="btn-account-nav" onclick="handleAccountNav()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span id="nav-account-label">Mi cuenta</span>
+        </button>
+        <a href="#contacto" class="btn-order-nav" onclick="scrollToSection('contacto');return false">
+          <span>✨</span> Hacer pedido
+        </a>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#inicio" onclick="scrollToSection('inicio');closeMobileMenu();return false">Inicio</a>
+      <a href="#menu" onclick="scrollToSection('menu');closeMobileMenu();return false">Menú</a>
+      <a href="#historia" onclick="scrollToSection('historia');closeMobileMenu();return false">Historia</a>
+      <a href="#contacto" onclick="scrollToSection('contacto');closeMobileMenu();return false">Contacto</a>
+      <button style="display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:#AB9CDB;font-weight:600" onclick="handleAccountNav()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span id="mobile-account-label">Mi cuenta</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="inicio" style="padding:7.5rem 1.5rem 5rem;max-width:1200px;margin:0 auto">
+    <div class="hero-grid">
+      <div class="anim-fade-up">
+        <div class="hero-badge">🌸 Repostería Artesanal</div>
+        <h1 class="hero-title">
+          Sabor con <span class="accent">Pasión</span>
+        </h1>
+        <p class="hero-desc">
+          En Oleya elaboramos galletas de mantequilla decoradas y personalizadas, galletas new york y pays artesanales con ingredientes naturales seleccionados. Cada bocado es una bomba de sabor.
+        </p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="scrollToSection('menu')">Ver el menú ✨</button>
+          <button class="btn-outline" onclick="scrollToSection('historia')">Nuestra historia</button>
+        </div>
+        <div class="hero-badges-row">
+          <div class="hero-badge-item"><span>🍀</span> Ingredientes naturales</div>
+          <div class="hero-badge-item"><span>💙</span> Hecho con amor</div>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <div class="hero-img-blob blob-1"></div>
+        <div class="hero-img-blob blob-2"></div>
+        <div class="hero-img-frame">
+          <img src="https://images.unsplash.com/photo-1594403758808-58d9e13cff40?w=900&h=600&fit=crop&auto=format" alt="Galletas artesanales Oleya" loading="eager">
+        </div>
+        <div class="hero-card hero-card-1">
+          <span class="emoji">🌈</span>
+          <div>
+            <p>Horneamos</p>
+            <p>Cada mañana</p>
+          </div>
+        </div>
+        <div class="hero-card hero-card-2">
+          <div>
+            <p>+10 recetas</p>
+            <p>artesanales ✨</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-divider">
+      <span>🌸</span><span>🍩</span><span>🌸</span><span>🧁</span><span>🌸</span><span>🍰</span><span>🌸</span><span>🐰</span><span>🌸</span>
+    </div>
+  </section>
+
+  <!-- MENÚ -->
+  <section id="menu" style="padding:5rem 1.5rem;background:rgba(233,215,249,.35)">
+    <div class="section-header">
+      <span class="section-eyebrow">🍰 Nuestras delicias</span>
+      <h2 class="section-title">El Menú</h2>
+      <p class="section-sub">Elaborados diariamente con recetas propias y los mejores ingredientes.</p>
+    </div>
+    <div class="menu-grid" id="menu-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- HISTORIA -->
+  <section id="historia" style="padding:5rem 1.5rem">
+    <div style="max-width:1200px;margin:0 auto">
+      <div class="historia-grid">
+        <div class="historia-photos">
+          <div class="historia-photo-1">
+            <img src="https://images.unsplash.com/photo-1656237464012-7e22a14401ad?w=700&h=500&fit=crop&auto=format" alt="Elaboración artesanal" loading="lazy">
+          </div>
+          <div class="historia-photo-2">
+            <img src="https://images.unsplash.com/photo-1725297952102-ab28892a31ab?w=700&h=500&fit=crop&auto=format" alt="Pan artesanal" loading="lazy">
+          </div>
+          <div class="historia-badge">
+            <div class="num" id="historia-years-display">4</div>
+            <div class="lbl">años horneando</div>
+          </div>
+        </div>
+        <div class="historia-text">
+          <span class="section-eyebrow">🐰 Nuestra historia</span>
+          <h2 id="historia-title-display">De una pequeña cocina a tu corazón</h2>
+          <p id="historia-p1-display">En diciembre de 2022, Maria Jose Novelo Triay comenzó con algunos utensilios de cocina y el horno de su mamá. Los primeros pedidos llegaron de familiares y amigos.</p>
+          <p id="historia-p2-display">Con esfuerzo logró su Kitchen Aid, perfeccionó su receta y construyó una marca con identidad propia — Oleya by M.J.</p>
+          <div class="historia-features">
+            <div class="feat-card"><div class="fi">🌸</div><h4>Recetas propias</h4><p>10+ recetas desarrolladas en casa.</p></div>
+            <div class="feat-card"><div class="fi">✨</div><h4>Sin conservadores</h4><p>Ingredientes frescos y naturales siempre.</p></div>
+            <div class="feat-card"><div class="fi">💙</div><h4>Con amor</h4><p>Cada pieza horneada con dedicación.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER -->
+  <section id="banner" style="padding:4rem 1.5rem;background:#AB9CDB">
+    <div class="banner-inner">
+      <span class="icon">🌈</span>
+      <h2 id="banner-title-display">Pedidos especiales y personalizados</h2>
+      <p id="banner-sub-display">Bodas, quinceañeros, cumpleaños. Creamos el pastel de tus sueños con los sabores que más amas.</p>
+      <button class="btn-banner" onclick="scrollToSection('contacto')">Cotizar ahora ✨</button>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" style="padding:5rem 1.5rem;background:var(--bg)">
+    <div class="contacto-grid">
+      <div class="contacto-info">
+        <span class="section-eyebrow">💬 Escríbenos</span>
+        <h2>Estamos aquí para ti 🌸</h2>
+        <p>Selecciona lo que deseas pedir y te contactaremos directamente por WhatsApp para coordinar tu pedido.</p>
+        <div id="user-address-info" style="display:none" class="admin-card" style="border-color:rgba(171,156,219,.2)">
+          <span>✨</span>
+          <div>
+            <p style="font-family:var(--font-caps);font-size:.85rem;color:var(--primary);font-weight:700">Tu info guardada</p>
+            <p id="user-addr-text" style="font-size:.78rem;color:var(--gray);margin-top:.15rem"></p>
+          </div>
+        </div>
+        <div class="info-cards">
+          <div class="info-card"><span class="ei">📦</span><div><h4>Pedidos express</h4><p>Entrega en 24–48 horas en la ciudad.</p></div></div>
+          <div class="info-card"><span class="ei">🛵</span><div><h4>Envíos a domicilio</h4><p id="contact-hours">Lunes a sábado de 9:00 a 18:00 hrs.</p></div></div>
+          <div class="info-card"><span class="ei">🏪</span><div><h4>Visítanos</h4><p id="contact-address">Calle 21, Esquina. Col. México</p></div></div>
+          <div class="info-card"><span class="ei">💬</span><div><h4>WhatsApp directo</h4><p id="contact-wa">+52 999 958 4400</p></div></div>
+        </div>
+      </div>
+      <!-- WhatsApp order form -->
+      <div class="order-form-card">
+        <div class="order-form-header">
+          <div class="wa-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.124 1.528 5.855L.057 23.882a.5.5 0 0 0 .612.612l6.092-1.457A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.87 0-3.63-.483-5.163-1.328l-.36-.207-3.795.909.934-3.71-.228-.374A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          </div>
+          <div>
+            <h3>Hacer un pedido</h3>
+            <p>Te contactaremos por WhatsApp al instante</p>
+          </div>
+        </div>
+
+        <div id="form-logged-as" class="form-logged-as" style="display:none">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#AB9CDB" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Pedido como <strong id="form-logged-name"></strong>
+        </div>
+
+        <div class="form-field">
+          <label>🌸 Tu nombre</label>
+          <input type="text" id="order-nombre" placeholder="¿Cómo te llamas?">
+        </div>
+        <div class="form-field">
+          <label>📱 Tu teléfono (opcional)</label>
+          <input type="tel" id="order-tel" placeholder="999-000-0000">
+        </div>
+
+        <div class="form-field">
+          <label>🛍 ¿Qué deseas pedir?</label>
+          <div class="product-list" id="product-list"><!-- rendered by JS --></div>
+        </div>
+
+        <div id="qty-section" style="display:none" class="form-field">
+          <label>📦 Cantidad</label>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span class="qty-value" id="qty-value">1</span>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+
+        <div id="notes-section" style="display:none" class="form-field">
+          <label id="notes-label">📝 Notas adicionales (opcional)</label>
+          <textarea id="order-notes" rows="3" placeholder="Alergias, diseño especial, fecha de entrega..."></textarea>
+        </div>
+
+        <p class="form-error" id="order-error" style="display:none"></p>
+
+        <button class="btn-wa" onclick="sendWhatsApp()">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.124 1.528 5.855L.057 23.882a.5.5 0 0 0 .612.612l6.092-1.457A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.87 0-3.63-.483-5.163-1.328l-.36-.207-3.795.909.934-3.71-.228-.374A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Enviar pedido por WhatsApp
+        </button>
+
+        <p class="form-hint" id="form-hint-register">
+          ¿Quieres que recordemos tu dirección?
+          <button onclick="showView('view-user-login')">Crea una cuenta</button>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="OleyaWebsite_design/src/imports/oleyalogo__Converted_-01.png" alt="Oleya by M.J." onerror="this.style.display='none'">
+      </div>
+      <div class="footer-links">
+        <a href="#inicio" onclick="scrollToSection('inicio');return false">Inicio</a>
+        <a href="#menu" onclick="scrollToSection('menu');return false">Menú</a>
+        <a href="#historia" onclick="scrollToSection('historia');return false">Historia</a>
+        <a href="#contacto" onclick="scrollToSection('contacto');return false">Contacto</a>
+      </div>
+      <p class="copy">© 2024 Oleya by M.J. · Hecho con 🤍</p>
+    </div>
+  </footer>
+
+  <!-- Admin float btn -->
+  <button id="btn-admin-float" onclick="showView('view-admin-login')">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    Admin
+  </button>
+</div>
+<!-- /view-site -->
+
+
+<!-- ═══════════════════════════════════
+     ADMIN LOGIN VIEW
+═══════════════════════════════════ -->
+<div id="view-admin-login" class="view">
+  <div class="auth-view">
+    <div class="auth-box">
+      <button class="auth-back" onclick="showView('view-site')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Volver al sitio
+      </button>
+      <div class="auth-card anim-fade-up">
+        <div class="auth-card-header">
+          <span class="ico">🔐</span>
+          <h1>Panel Admin</h1>
+          <p>Acceso restringido — Oleya by M.J.</p>
+        </div>
+        <form class="auth-form" onsubmit="handleAdminLogin(event)">
+          <div class="form-field">
+            <label>Correo electrónico</label>
+            <input type="email" id="admin-email" placeholder="admin@oleya.mx" required>
+          </div>
+          <div class="form-field">
+            <label>Contraseña</label>
+            <div class="pw-wrap">
+              <input type="password" id="admin-pw" placeholder="••••••••" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('admin-pw',this)">
+                <svg id="admin-pw-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <p class="form-error" id="admin-error" style="display:none">Credenciales incorrectas. Intenta de nuevo.</p>
+          <button type="submit" class="auth-submit">Entrar al panel ✨</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     ADMIN DASHBOARD VIEW
+═══════════════════════════════════ -->
+<div id="view-admin" class="view">
+  <header class="admin-topbar">
+    <div class="admin-topbar-left">
+      <button class="hamburger" id="admin-hamburger" onclick="toggleAdminSidebar()" style="display:none">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="admin-brand">Oleya Admin</span>
+    </div>
+    <div class="admin-topbar-right">
+      <span class="saved-badge" id="saved-badge">✓ Guardado</span>
+      <button class="btn-save" onclick="saveAdmin()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar cambios
+      </button>
+      <button class="btn-logout" onclick="logoutAdmin()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Salir
+      </button>
+    </div>
+  </header>
+  <div class="admin-body">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <p class="sidebar-label">Secciones</p>
+      <button class="sidebar-btn active" id="tab-btn-inicio" onclick="setAdminTab('inicio')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Inicio
+      </button>
+      <button class="sidebar-btn" id="tab-btn-menu" onclick="setAdminTab('menu')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Menú
+      </button>
+      <button class="sidebar-btn" id="tab-btn-historia" onclick="setAdminTab('historia')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Historia
+      </button>
+      <button class="sidebar-btn" id="tab-btn-contacto" onclick="setAdminTab('contacto')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.61 0h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 7.91a16 16 0 0 0 5.61 5.61l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Contacto
+      </button>
+      <div class="sidebar-footer">
+        <p class="uname">Admin</p>
+        <p class="uemail">admin@oleya.mx</p>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <!-- INICIO TAB -->
+      <div class="admin-section active" id="admin-tab-inicio">
+        <h2 class="admin-section-title">Sección Inicio</h2>
+        <div class="admin-card">
+          <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2"/></svg> Identidad de marca</h3>
+          <div class="form-field">
+            <label>Nombre de la marca (nav + footer)</label>
+            <input type="text" id="ad-brandName" value="Oleya by M.J.">
+          </div>
+        </div>
+        <div class="admin-card">
+          <h3>Hero principal</h3>
+          <div class="admin-grid-2">
+            <div class="form-field">
+              <label>Título (parte normal)</label>
+              <input type="text" id="ad-heroTitle" value="Sabor con">
+            </div>
+            <div class="form-field">
+              <label>Acento en morado</label>
+              <input type="text" id="ad-heroAccent" value="Pasión">
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Descripción</label>
+            <textarea id="ad-heroDesc" rows="3">En Oleya elaboramos galletas de mantequilla decoradas y personalizadas, galletas new york y pays artesanales con ingredientes naturales seleccionados. Cada bocado es una bomba de sabor.</textarea>
+          </div>
+        </div>
+        <div class="admin-card">
+          <h3>🌈 Banner central</h3>
+          <div class="form-field">
+            <label>Título del banner</label>
+            <input type="text" id="ad-bannerTitle" value="Pedidos especiales y personalizados">
+          </div>
+          <div class="form-field">
+            <label>Subtítulo del banner</label>
+            <textarea id="ad-bannerSub" rows="2">Bodas, quinceañeros, cumpleaños. Creamos el pastel de tus sueños con los sabores que más amas.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU TAB -->
+      <div class="admin-section" id="admin-tab-menu">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem">
+          <h2 class="admin-section-title">Sección Menú</h2>
+          <button class="btn-add-product" onclick="addMenuItem()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Agregar producto
+          </button>
+        </div>
+        <div class="admin-card">
+          <h3>Encabezado de sección</h3>
+          <div class="form-field">
+            <label>Título del menú</label>
+            <input type="text" id="ad-menuTitle" value="El Menú">
+          </div>
+          <div class="form-field">
+            <label>Subtítulo</label>
+            <textarea id="ad-menuSub" rows="2">Elaborados diariamente con recetas propias y los mejores ingredientes.</textarea>
+          </div>
+        </div>
+        <div id="admin-menu-items"><!-- rendered by JS --></div>
+      </div>
+
+      <!-- HISTORIA TAB -->
+      <div class="admin-section" id="admin-tab-historia">
+        <h2 class="admin-section-title">Sección Historia</h2>
+        <div class="admin-card">
+          <div class="form-field">
+            <label>Título de la sección</label>
+            <input type="text" id="ad-histTitle" value="De una pequeña cocina a tu corazón">
+          </div>
+          <div class="form-field">
+            <label>Primer párrafo</label>
+            <textarea id="ad-histP1" rows="3">En diciembre de 2022, Maria Jose Novelo Triay comenzó con algunos utensilios de cocina y el horno de su mamá. Los primeros pedidos llegaron de familiares y amigos.</textarea>
+          </div>
+          <div class="form-field">
+            <label>Segundo párrafo</label>
+            <textarea id="ad-histP2" rows="3">Con esfuerzo logró su Kitchen Aid, perfeccionó su receta y construyó una marca con identidad propia — Oleya by M.J.</textarea>
+          </div>
+          <div class="form-field">
+            <label>Número de la insignia (años horneando)</label>
+            <input type="text" id="ad-histYears" value="4">
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACTO TAB -->
+      <div class="admin-section" id="admin-tab-contacto">
+        <h2 class="admin-section-title">Sección Contacto</h2>
+        <div class="admin-card">
+          <h3>📞 Información de contacto</h3>
+          <div class="form-field">
+            <label>Número de WhatsApp (con código de país, sin + ni espacios)</label>
+            <input type="text" id="ad-waNumber" value="529999584400" placeholder="529999584400">
+          </div>
+          <div class="hint-box">Los pedidos del sitio se envían directamente a este número como mensaje de WhatsApp.</div>
+          <div class="form-field">
+            <label>Dirección</label>
+            <input type="text" id="ad-address" value="Calle 21, Esquina. Col. México">
+          </div>
+          <div class="form-field">
+            <label>Horario de envíos</label>
+            <input type="text" id="ad-hours" value="Lunes a sábado de 9:00 a 18:00 hrs.">
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<!-- /view-admin -->
+
+
+<!-- ═══════════════════════════════════
+     USER LOGIN VIEW
+═══════════════════════════════════ -->
+<div id="view-user-login" class="view">
+  <div class="auth-view">
+    <div class="auth-box">
+      <button class="auth-back" onclick="showView('view-site')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        Volver al sitio
+      </button>
+      <div class="auth-card anim-fade-up">
+        <div class="auth-card-header">
+          <span class="ico">🌸</span>
+          <h1>¡Bienvenida de vuelta!</h1>
+          <p>Inicia sesión para guardar tu info de entrega.</p>
+        </div>
+        <form class="auth-form" onsubmit="handleUserLogin(event)">
+          <div class="form-field">
+            <label>Correo electrónico</label>
+            <input type="email" id="user-email" placeholder="tu@correo.com" required>
+          </div>
+          <div class="form-field">
+            <label>Contraseña</label>
+            <div class="pw-wrap">
+              <input type="password" id="user-pw" placeholder="••••••••" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('user-pw',this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <p class="form-error" id="user-login-error" style="display:none">Correo o contraseña incorrectos.</p>
+          <button type="submit" class="auth-submit">Entrar ✨</button>
+        </form>
+        <p class="auth-link-row">
+          ¿No tienes cuenta? <button onclick="showView('view-user-register')">Regístrate</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     USER REGISTER VIEW
+═══════════════════════════════════ -->
+<div id="view-user-register" class="view">
+  <div class="auth-view" style="padding:4rem 1rem">
+    <div class="auth-box">
+      <button class="auth-back" onclick="showView('view-user-login')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        Volver
+      </button>
+      <div class="auth-card anim-fade-up">
+        <div class="auth-card-header">
+          <span class="ico">💌</span>
+          <h1>Crear cuenta</h1>
+          <p>Guarda tu info para pedidos más rápidos.</p>
+        </div>
+        <form class="auth-form" onsubmit="handleUserRegister(event)">
+          <div class="form-field">
+            <label>Nombre completo</label>
+            <input type="text" id="reg-name" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-field">
+            <label>Correo electrónico</label>
+            <input type="email" id="reg-email" placeholder="tu@correo.com" required>
+          </div>
+          <div class="form-field">
+            <label>Contraseña</label>
+            <div class="pw-wrap">
+              <input type="password" id="reg-pw" placeholder="••••••••" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('reg-pw',this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Teléfono</label>
+            <input type="tel" id="reg-phone" placeholder="999-000-0000">
+          </div>
+          <div class="form-field">
+            <label>Dirección de entrega</label>
+            <input type="text" id="reg-address" placeholder="Calle y número">
+          </div>
+          <div class="form-field">
+            <label>Colonia</label>
+            <input type="text" id="reg-colonia" placeholder="Col. ...">
+          </div>
+          <button type="submit" class="auth-submit">Crear mi cuenta 🌸</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     SUCCESS SCREEN (hidden, shown on register)
+═══════════════════════════════════ -->
+<div id="view-success" class="view">
+  <div class="success-screen">
+    <span class="ico">🎉</span>
+    <h2>¡Cuenta creada!</h2>
+    <p>Redirigiendo...</p>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Variables de entorno y credenciales
+.env
+*.env
+backend/.env
+
+# Python (Cache, Compilados y Entornos Virtuales)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+.venv/
+env/
+.env/
+
+# Archivos temporales o de sistema
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
