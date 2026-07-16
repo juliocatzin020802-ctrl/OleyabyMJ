@@ -879,14 +879,18 @@ async function addMenuItem() {
   let id_etiqueta = null;
   if (supabaseClient) {
     try {
-      const { data: tag } = await supabaseClient
+      const { data: tags, error: tagError } = await supabaseClient
         .from('etiquetas')
         .select('id_etiqueta')
-        .eq('nombre', 'Nuevo')
-        .single();
-      if (tag) id_etiqueta = tag.id_etiqueta;
+        .eq('nombre', 'Nuevo');
+      
+      if (tagError) {
+        console.warn('Error buscando etiqueta Nuevo:', tagError);
+      } else if (tags && tags.length > 0) {
+        id_etiqueta = tags[0].id_etiqueta;
+      }
     } catch (err) {
-      console.warn('Error buscando etiqueta Nuevo:', err);
+      console.warn('Error general buscando etiqueta Nuevo:', err);
     }
   }
 
@@ -906,19 +910,23 @@ async function addMenuItem() {
           id_etiqueta: id_etiqueta,
           activo: true
         })
-        .select('id_producto')
-        .single();
+        .select('id_producto');
 
       if (error) {
         console.error('Error creando producto:', error);
-        alert('Error al crear el producto: ' + error.message);
+        alert('Error al crear el producto en Base de Datos: ' + (error.message || JSON.stringify(error)));
         return;
       }
-      if (data) newId = data.id_producto;
-      console.log('✅ Producto creado en Supabase');
+      
+      if (data && data.length > 0) {
+        newId = data[0].id_producto;
+        console.log('✅ Producto creado en Supabase:', newId);
+      } else {
+        console.warn('Supabase no retornó datos del producto creado (posible problema de RLS).');
+      }
     } catch (err) {
       console.error('Error general al crear producto:', err);
-      alert('Error al crear el producto.');
+      alert('Error al crear el producto: ' + err.message);
       return;
     }
   }
