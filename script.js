@@ -397,6 +397,12 @@ function sendWhatsApp() {
   const errEl = document.getElementById('order-error');
 
   if (!nombre) { showError(errEl, 'Por favor escribe tu nombre.'); return; }
+
+  // Validación de teléfono: opcional, pero si se ingresa debe ser exactamente 10 dígitos numéricos
+  if (tel && !/^\d{10}$/.test(tel)) {
+    showError(errEl, 'El teléfono debe contener exactamente 10 dígitos numéricos.');
+    return;
+  }
   if (!state.cart || state.cart.length === 0) {
     showError(errEl, 'Por favor agrega al menos un producto a tu pedido.');
     return;
@@ -603,6 +609,12 @@ async function handleUserRegister(e) {
   const phone = document.getElementById('reg-phone').value.trim();
   const address = document.getElementById('reg-address').value.trim();
   const colonia = document.getElementById('reg-colonia').value.trim();
+
+  // Validación de teléfono: solo números y exactamente 10 dígitos
+  if (!/^\d{10}$/.test(phone)) {
+    alert('El teléfono debe contener exactamente 10 dígitos numéricos.');
+    return;
+  }
   
   if (!supabaseClient) {
     alert("Supabase no está configurado o cargado correctamente.");
